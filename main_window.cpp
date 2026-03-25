@@ -17,6 +17,11 @@ MainWindow::MainWindow(QWidget *parent)
     setWindowFlags(Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint | windowFlags());
 
     connect(this, &MainWindow::customContextMenuRequested, this, &MainWindow::showContextMenu);
+    _ui->_lcd_number->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(_ui->_lcd_number, &QLCDNumber::customContextMenuRequested, this, [this](const QPoint &pos)
+    {
+        showContextMenu(_ui->_lcd_number->mapTo(this, pos));
+    });
 
     QTimer *timer{new QTimer(this)};
 
