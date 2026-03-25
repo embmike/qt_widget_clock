@@ -60,7 +60,6 @@ Strict textbook MVC is slightly blurred (controller opens a dialog directly), bu
 | `preference_dialog.h/.cpp` | Dialog for selecting the clock color (OK/Cancel). |
 | `enum_index.h` | Small enum utility helper. |
 | `images/app_view.jpg` | Screenshot of the running app. |
-| `images/ide_view.jpg` | Screenshot of the IDE/project view. |
 | `LICENSE` | MIT license text. |
 
 ## 5) Build and run
