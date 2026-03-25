@@ -58,7 +58,7 @@ void MainWindow::mousePressEvent(QMouseEvent *e)
 
 void MainWindow::mouseMoveEvent(QMouseEvent *e)
 {
-    this->move(e->globalPosition() - _mouse_pos);
+    this->move(e->globalPosition().toPoint() - _mouse_pos);
 }
 
 void MainWindow::mouseReleaseEvent(QMouseEvent *e)
@@ -73,7 +73,7 @@ void MainWindow::mouseReleaseEvent(QMouseEvent *e)
     }
 }
 
-void closeEvent(QCloseEvent *e)
+void MainWindow::closeEvent(QCloseEvent *e)
 {
     e->accept();
 }
