@@ -26,8 +26,8 @@ public:
      * @brief Erzeugt das Hauptfenster.
      * @param parent Optionales Parent-Widget.
      */
-     
     explicit MainWindow(QWidget *parent = nullptr);
+
     /**
      * @brief Zerstört das Hauptfenster und gibt UI-Ressourcen frei.
      */
