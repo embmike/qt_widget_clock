@@ -16,7 +16,7 @@ class QWidget;
 /**
  * @brief Controller für die LCD-Uhr.
  *
- * Die Klasse verbindet Clock-Model und LCD-View:
+ * @details Die Klasse verbindet Clock-Model und LCD-View:
  * - zyklische Zeitaktualisierung
  * - Anwenden der konfigurierten Textfarbe
  * - Öffnen des Präferenzdialogs und Rückschreiben ins Modell
@@ -43,6 +43,7 @@ public:
 private slots:
     /** @brief Aktualisiert die Zeitdarstellung (blinkender Doppelpunkt). */
     void updateDisplay();
+
     /**
      * @brief Wendet die im Modell gewählte Farbe auf die Anzeige an.
      * @param color Neue Farbauswahl.
@@ -52,8 +53,10 @@ private slots:
 private:
     /** @brief Referenz auf die zu aktualisierende LCD-Anzeige. */
     QLCDNumber *_display{nullptr};
+
     /** @brief Modell mit persistierten Anzeigeeinstellungen. */
     ClockSettingsModel *_settings{nullptr};
+
     /** @brief Taktgeber für periodische Aktualisierungen. */
     QTimer *_timer{nullptr};
 };

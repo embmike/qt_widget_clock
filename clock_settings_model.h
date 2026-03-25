@@ -6,11 +6,13 @@
 #define CLOCK_SETTINGS_MODEL_H
 
 #include <QObject>
+#include <QMap>
+#include <QColor>
 
 /**
  * @brief Modell zur Verwaltung der auswählbaren Uhrfarben.
  *
- * Die Klasse persistiert die ausgewählte Farbe über @c QSettings und stellt
+ * @details Die Klasse persistiert die ausgewählte Farbe über @c QSettings und stellt
  * Änderungsbenachrichtigungen für Controller/View bereit.
  */
 class ClockSettingsModel : public QObject
@@ -21,12 +23,13 @@ public:
     /**
      * @brief Verfügbare Farbschemata für die LCD-Anzeige.
      */
-    enum class ClockColor
+    enum struct ClockColor
     {
-        Black = 0,
-        White = 1,
-        Green = 2,
-        Red = 3
+        White,
+        Green,
+        Red,
+        Dark_Blue,
+        Black,
     };
     Q_ENUM(ClockColor)
 
@@ -58,10 +61,15 @@ signals:
 private:
     /** @brief Lädt die persistierte Farbauswahl aus den Einstellungen. */
     void load();
+
     /** @brief Schreibt die Farbauswahl in die Einstellungen. */
     void save() const;
+
+    /** @brief Mappe der Farben bezüglich ClockColor. */
+    static const QMap<size_t, QColor> _color_map;
+
     /** @brief Aktuell selektierte Farbauswahl. */
-    ClockColor _color{ClockColor::Green};
+    QColor _color{Qt::black};
 };
 
 #endif // CLOCK_SETTINGS_MODEL_H

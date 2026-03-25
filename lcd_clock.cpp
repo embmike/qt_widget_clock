@@ -18,6 +18,7 @@ LcdClock::LcdClock(QLCDNumber *display, ClockSettingsModel *settings, QObject *p
 {
     connect(_timer, &QTimer::timeout, this, &LcdClock::updateDisplay);
     connect(_settings, &ClockSettingsModel::colorChanged, this, &LcdClock::applyColor);
+
     _timer->start(1000);
     applyColor(_settings->color());
     updateDisplay();
@@ -25,7 +26,8 @@ LcdClock::LcdClock(QLCDNumber *display, ClockSettingsModel *settings, QObject *p
 
 void LcdClock::showPreferencesDialog(QWidget *parent)
 {
-    PreferenceDialog dialog(_settings->color(), parent);
+    PreferenceDialog dialog{_settings->color(), parent};
+
     if (dialog.exec() == QDialog::Accepted)
     {
         _settings->setColor(dialog.selectedColor());
@@ -50,19 +52,32 @@ void LcdClock::applyColor(ClockSettingsModel::ClockColor color)
     QPalette palette{};
     switch (color)
     {
-    case ClockSettingsModel::ClockColor::Black:
-        palette.setColor(QPalette::WindowText, Qt::black);
-        break;
-    case ClockSettingsModel::ClockColor::White:
-        palette.setColor(QPalette::WindowText, Qt::white);
-        break;
-    case ClockSettingsModel::ClockColor::Red:
-        palette.setColor(QPalette::WindowText, Qt::red);
-        break;
-    case ClockSettingsModel::ClockColor::Green:
-    default:
-        palette.setColor(QPalette::WindowText, Qt::green);
-        break;
+        case ClockSettingsModel::ClockColor::White:
+        {
+            palette.setColor(QPalette::WindowText, Qt::white);
+            break;
+        }
+        case ClockSettingsModel::ClockColor::Green:
+        {
+            palette.setColor(QPalette::WindowText, Qt::green);
+            break;
+        }
+        case ClockSettingsModel::ClockColor::Red:
+        {
+            palette.setColor(QPalette::WindowText, Qt::red);
+            break;
+        }
+        case ClockSettingsModel::ClockColor::Dark_Blue:
+        {
+            palette.setColor(QPalette::WindowText, Qt::darkBlue);
+            break;
+        }
+        case ClockSettingsModel::ClockColor::Black: [[fallthrough]];
+        default:
+        {
+            palette.setColor(QPalette::WindowText, Qt::black);
+            break;
+        }
     }
 
     _display->setPalette(palette);
