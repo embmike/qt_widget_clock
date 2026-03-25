@@ -1,129 +1,88 @@
-# LCD Clock as a Qt Widget
+# Qt Widget Clock
 
-A lightweight desktop digital clock built with **Qt Widgets (C++23)**.
-The app shows the current local time in a frameless, always-on-top LCD-style window and lets users customize the display color.
+A small desktop clock built with **Qt Widgets** and **C++23**.
+It displays the local time in an LCD style, stays on top of other windows, and lets users choose a preferred clock color.
 
-<img src="./images/app_view.jpg" alt="View of the application" width="30%" height="30%" />
+<img src="./images/app_view.jpg" alt="Application screenshot" width="30%" />
 
----
+## 1) What is the function of this clock?
 
-## What the clock does
+The app is designed as a lightweight desktop time widget:
 
-The application provides a compact, always-visible time widget for the desktop:
+- Displays local time in `hh:mm` format.
+- Updates every second.
+- Blinks the separator (`:`) by alternating between `:` and a space.
+- Uses a frameless, transparent, always-on-top window.
+- Saves user preferences and restores them on the next start.
 
-- Shows the current local time in `hh:mm` format.
-- Blinks the separator (`:`) once per second (visual pulse effect).
-- Runs in a **frameless** window with **transparent background** and **always-on-top** behavior.
-- Persists user preferences and window geometry between runs.
+## 2) What can the user do? (functional use cases)
 
----
+- **Read time quickly:** Keep the clock above other windows for quick time checks.
+- **Move the clock:** Drag the frameless widget to any desktop position.
+- **Open context menu:** Right-click to open actions.
+- **Change color:** Open **Preferences** and select one of the available colors.
+- **Exit application:** Use context menu action **Exit**.
+- **Continue where you left off:** Window geometry/state and selected color are persisted.
 
-## User-facing functionality (use cases)
+## 3) MVC architecture review
 
-### 1. Quick time glance while working
-A user keeps the widget on top of other windows to see the current time without switching apps.
+### Verdict
+The current architecture is still **reasonable and maintainable** for the size of this application.
 
-### 2. Positioning the clock freely
-A user can drag the widget with the mouse and place it anywhere on the desktop.
+### Current responsibility split
+- **Model**
+  - `ClockSettingsModel`: stores/loads color via `QSettings`, emits `colorChanged`.
+- **View**
+  - `MainWindow` + `main_window.ui`: window shell and visual container.
+  - `PreferenceDialog`: UI for choosing a color.
+- **Controller / coordinator**
+  - `LcdClock`: timer-based time update, palette update, and settings-dialog workflow.
 
-### 3. Customizing color for readability/theme
-A user opens the context menu and chooses **Preferences** to set a preferred clock color (White, Green, Red, Dark Blue, Black).
+### Why it is still sensible
+- Persistence is isolated in one model class.
+- Time update + display behavior are centralized in one coordinator (`LcdClock`).
+- Window mechanics and dialog UI stay in dedicated UI classes.
+- Complexity is low, and the code is easy to navigate.
 
-### 4. Persistent setup across restarts
-A user closes and reopens the app and gets:
-- the same window position/state,
-- the previously selected color.
+### Practical note
+Strict textbook MVC is slightly blurred (controller opens a dialog directly), but for a compact Qt widget app this trade-off is acceptable.
 
-### 5. Fast exit
-A user opens the context menu and selects **Exit**.
+## 4) File responsibilities (short description)
 
----
+| File | Responsibility |
+|---|---|
+| `CMakeLists.txt` | Build setup, Qt package discovery, target creation, install rules. |
+| `main.cpp` | Application entry point (`QApplication` init, app metadata, `MainWindow` startup). |
+| `main_window.h/.cpp` | Main frameless window, drag behavior, context menu, geometry/state persistence. |
+| `main_window.ui` | Qt Designer UI definition (contains LCD display widget). |
+| `lcd_clock.h/.cpp` | Clock logic: periodic update, blinking separator, color application, preferences flow. |
+| `clock_settings_model.h/.cpp` | Settings model for color persistence and change notification. |
+| `preference_dialog.h/.cpp` | Dialog for selecting the clock color (OK/Cancel). |
+| `enum_index.h` | Small enum utility helper. |
+| `images/app_view.jpg` | Screenshot of the running app. |
+| `images/ide_view.jpg` | Screenshot of the IDE/project view. |
+| `LICENSE` | MIT license text. |
 
-## Architecture check: Is MVC still a good fit?
-
-Short answer: **Yes, the current architecture is still sensible for this project size.**
-
-### Current mapping
-- **Model**: `ClockSettingsModel`
-  - stores and loads persistent settings (currently color) via `QSettings`.
-- **View**: `MainWindow` + `main_window.ui`, and `PreferenceDialog`
-  - render UI elements and collect user interaction.
-- **Controller / Application logic**: `LcdClock`
-  - updates time every second,
-  - applies color changes to the display,
-  - opens the preferences dialog and writes back to the model.
-
-### Why this is appropriate
-- Responsibilities are already separated clearly enough.
-- Display logic is not mixed into persistence logic.
-- UI classes stay mostly focused on interaction/layout.
-- For a small widget app, this keeps complexity low and maintainability good.
-
-### Optional improvements (if the project grows)
-- Move dialog orchestration out of `LcdClock` into a dedicated UI controller if settings become more complex.
-- Introduce a dedicated view wrapper for `QLCDNumber` if multiple clock views are needed.
-- Extend `ClockSettingsModel` with validation (e.g., default fallbacks for unknown values).
-
----
-
-## Project structure and file responsibilities
-
-### Build and entry
-- `CMakeLists.txt`  
-  Build configuration (Qt discovery, target definition, source list, install rules).
-- `main.cpp`  
-  Application entry point; initializes `QApplication`, organization/app name, and shows `MainWindow`.
-
-### Main window (View shell)
-- `main_window.h` / `main_window.cpp`  
-  Main frameless window, drag behavior, context menu, app close handling, and geometry/state persistence.
-- `main_window.ui`  
-  Qt Designer UI definition for the main window and embedded LCD widget.
-
-### Clock logic (Controller)
-- `lcd_clock.h` / `lcd_clock.cpp`  
-  Core clock behavior: timer-driven display updates, blinking separator, applying selected color, opening preferences dialog.
-
-### Settings (Model)
-- `clock_settings_model.h` / `clock_settings_model.cpp`  
-  Persistent user settings model (clock color), including `QSettings` load/save and change notification signal.
-
-### Preferences dialog (View)
-- `preference_dialog.h` / `preference_dialog.cpp`  
-  Modal settings dialog with color selection and OK/Cancel handling.
-
-### Utility
-- `enum_index.h`  
-  Small template helper for enum-to-index conversion (currently generic utility).
-
-### Assets and metadata
-- `images/app_view.jpg`  
-  Screenshot of the running application.
-- `images/ide_view.jpg`  
-  IDE/project screenshot.
-- `LICENSE`  
-  MIT license.
-
----
-
-## Build and run
+## 5) Build and run
 
 ### Requirements
-- CMake >= 3.16
+- CMake 3.16+
 - C++23 compiler
-- Qt Widgets (Qt5 or Qt6)
+- Qt Widgets (Qt 5 or Qt 6)
 
-### Typical build steps
+### Commands
 ```bash
 cmake -S . -B build
 cmake --build build
+```
+
+Run binary (single-config generators):
+```bash
 ./build/qt_widget_clock
 ```
 
-> On multi-config generators (e.g., Visual Studio), run the executable from the selected configuration folder.
-
----
+For multi-config generators (e.g., Visual Studio), run the executable from the chosen configuration directory.
 
 ## License
 
-This project is licensed under the terms of the [MIT License](https://opensource.org/licenses/MIT).
+MIT License. See `LICENSE`.
