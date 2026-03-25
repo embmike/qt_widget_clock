@@ -30,6 +30,10 @@ MainWindow::MainWindow(QWidget *parent)
     {
         showContextMenu(_ui->_lcd_number->mapTo(this, pos));
     });
+
+    QSettings sts{};
+    restoreGeometry(sts.value("main_geometry").toByteArray());
+    restoreState(sts.value("main_state").toByteArray());
 }
 
 MainWindow::~MainWindow()

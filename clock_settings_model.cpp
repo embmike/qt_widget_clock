@@ -8,10 +8,10 @@
 
 const QMap<ClockSettingsModel::ClockColor, QColor> ClockSettingsModel::_color_map{
      {ClockSettingsModel::ClockColor::White, Qt::white}
-    ,{ClockSettingsModel::ClockColor::White, Qt::green}
-    ,{ClockSettingsModel::ClockColor::White, Qt::red}
-    ,{ClockSettingsModel::ClockColor::White, Qt::darkBlue}
-    ,{ClockSettingsModel::ClockColor::White, Qt::black}
+    ,{ClockSettingsModel::ClockColor::Green, Qt::green}
+    ,{ClockSettingsModel::ClockColor::Red, Qt::red}
+    ,{ClockSettingsModel::ClockColor::Dark_Blue, Qt::darkBlue}
+    ,{ClockSettingsModel::ClockColor::Black, Qt::black}
 };
 
 
