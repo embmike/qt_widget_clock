@@ -1,8 +1,11 @@
+/**
+ * @file main_window.cpp
+ * @brief Implementierung des MainWindow.
+ */
 #include "main_window.h"
+#include "lcd_clock.h"
 #include "./ui_main_window.h"
 
-#include <QTimer>
-#include <QTime>
 #include <QMouseEvent>
 #include <QMenu>
 #include <QAction>
@@ -10,37 +13,25 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , _ui(new Ui::MainWindow)
+    , _lcd_clock(nullptr)
 {
     _ui->setupUi(this);
+    _lcd_clock = new LcdClock(_ui->_lcd_number, this);
 
     setAttribute(Qt::WA_TranslucentBackground);
     setWindowFlags(Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint | windowFlags());
 
     connect(this, &MainWindow::customContextMenuRequested, this, &MainWindow::showContextMenu);
-
-    QTimer *timer{new QTimer(this)};
-
-    connect(timer, &QTimer::timeout, this, &MainWindow::updateTime);
-
-    timer->start(1000);
+    _ui->_lcd_number->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(_ui->_lcd_number, &QLCDNumber::customContextMenuRequested, this, [this](const QPoint &pos)
+    {
+        showContextMenu(_ui->_lcd_number->mapTo(this, pos));
+    });
 }
 
 MainWindow::~MainWindow()
 {
     delete _ui;
-}
-
-void MainWindow::updateTime()
-{
-    QTime current_time{QTime::currentTime()};
-    QString current_time_text{current_time.toString("hh:mm")};
-
-    if (current_time.second() % 2 == 0)
-    {
-        current_time_text[2] = ' ';
-    }
-
-    _ui->_lcd_number->display(current_time_text);
 }
 
 void MainWindow::showContextMenu(const QPoint &pos)
