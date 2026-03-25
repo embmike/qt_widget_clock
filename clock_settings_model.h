@@ -53,6 +53,10 @@ public:
      */
     void setColor(ClockColor color);
 
+    /**
+     * @brief Gibt die Uhrfarbe als QColor zurück.
+     * @param color Neue Farbauswahl.
+     */
     QColor getQColor(ClockColor color);
 
 signals:

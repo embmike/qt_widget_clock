@@ -74,8 +74,8 @@ protected:
      * @brief Verarbeitet Mausbewegungen zum Verschieben des Fensters.
      * @param event Mausereignis.
      */
-
     void mouseMoveEvent(QMouseEvent *event) override;
+
     /**
      * @brief Verarbeitet das Schließen des Fensters.
      * @param event Schließereignis.
