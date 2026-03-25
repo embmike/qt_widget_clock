@@ -10,12 +10,17 @@
 #include <QMouseEvent>
 #include <QMenu>
 #include <QAction>
+#include <QSettings>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , _ui(new Ui::MainWindow)
 {
     _ui->setupUi(this);
+
+    QSettings sts{};
+    restoreGeometry(sts.value("main_geometry").toByteArray());
+    restoreState(sts.value("main_state").toByteArray());
 
     setAttribute(Qt::WA_TranslucentBackground);
     setWindowFlags(Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint | windowFlags());
@@ -84,5 +89,10 @@ void MainWindow::mouseReleaseEvent(QMouseEvent *e)
 
 void MainWindow::closeEvent(QCloseEvent *e)
 {
+    QSettings  sts{};
+
+    sts.setValue("main_geometry", saveGeometry());
+    sts.setValue("main_state", saveState());
+
     e->accept();
 }
