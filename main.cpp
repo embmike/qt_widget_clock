@@ -1,3 +1,7 @@
+/**
+ * @file main.cpp
+ * @brief Einstiegspunkt der Anwendung.
+ */
 #include "main_window.h"
 
 #include <QApplication>

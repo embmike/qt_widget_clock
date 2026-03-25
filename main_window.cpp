@@ -1,3 +1,7 @@
+/**
+ * @file main_window.cpp
+ * @brief Implementierung des MainWindow.
+ */
 #include "main_window.h"
 #include "./ui_main_window.h"
 
