@@ -3,7 +3,6 @@
  * @brief Implementierung der Logikkomponente für die LCD-Uhr.
  */
 #include "lcd_clock.h"
-#include "enum_index.h"
 #include "preference_dialog.h"
 
 #include <QColor>
@@ -12,17 +11,6 @@
 #include <QPalette>
 #include <QTime>
 #include <QTimer>
-
-namespace
-{
-const QMap<size_t, QColor> kClockColorMap{
-     {enum_index(ClockSettingsModel::ClockColor::White), Qt::white}
-    ,{enum_index(ClockSettingsModel::ClockColor::Green), Qt::green}
-    ,{enum_index(ClockSettingsModel::ClockColor::Red), Qt::red}
-    ,{enum_index(ClockSettingsModel::ClockColor::Dark_Blue), Qt::darkBlue}
-    ,{enum_index(ClockSettingsModel::ClockColor::Black), Qt::black}
-};
-}
 
 LcdClock::LcdClock(QLCDNumber *display, ClockSettingsModel *settings, QObject *parent)
     : QObject(parent)
@@ -64,9 +52,8 @@ void LcdClock::updateDisplay()
 void LcdClock::applyColor(ClockSettingsModel::ClockColor color)
 {
     QPalette palette{};
-    const QColor display_color{
-        kClockColorMap.value(enum_index(color), Qt::black)};
 
+    const QColor display_color{_settings->getQColor(color)};
     palette.setColor(QPalette::WindowText, display_color);
 
     _display->setPalette(palette);

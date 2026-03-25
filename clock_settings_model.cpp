@@ -5,20 +5,15 @@
 #include "clock_settings_model.h"
 
 #include <QSettings>
-#include <algorithm>
-#include <array>
 
-namespace
-{
-constexpr auto kColourKey{"Colour"};
-constexpr std::array<ClockSettingsModel::ClockColor, 5> kAvailableColors{
-    ClockSettingsModel::ClockColor::White,
-    ClockSettingsModel::ClockColor::Green,
-    ClockSettingsModel::ClockColor::Red,
-    ClockSettingsModel::ClockColor::Dark_Blue,
-    ClockSettingsModel::ClockColor::Black,
+const QMap<ClockSettingsModel::ClockColor, QColor> ClockSettingsModel::_color_map{
+     {ClockSettingsModel::ClockColor::White, Qt::white}
+    ,{ClockSettingsModel::ClockColor::White, Qt::green}
+    ,{ClockSettingsModel::ClockColor::White, Qt::red}
+    ,{ClockSettingsModel::ClockColor::White, Qt::darkBlue}
+    ,{ClockSettingsModel::ClockColor::White, Qt::black}
 };
-}
+
 
 ClockSettingsModel::ClockSettingsModel(QObject *parent)
     : QObject{parent}
@@ -31,8 +26,13 @@ ClockSettingsModel::ClockColor ClockSettingsModel::color() const
     return _color;
 }
 
-void ClockSettingsModel::setColor(ClockSettingsModel::ClockColor color)
+QColor ClockSettingsModel::getQColor(ClockColor color)
 {
+    return _color_map.value(color);
+}
+
+void ClockSettingsModel::setColor(ClockColor color)
+{ 
     if (_color == color)
     {
         return;
@@ -46,25 +46,13 @@ void ClockSettingsModel::setColor(ClockSettingsModel::ClockColor color)
 void ClockSettingsModel::load()
 {
     QSettings settings{};
-    const auto persisted_value{
-        static_cast<size_t>(settings.value(
-            kColourKey,
-            static_cast<int>(ClockSettingsModel::ClockColor::Black)).toInt())};
-    const auto persisted_color{
-        static_cast<ClockSettingsModel::ClockColor>(persisted_value)};
 
-    if (std::find(kAvailableColors.cbegin(), kAvailableColors.cend(), persisted_color)
-        != kAvailableColors.cend())
-    {
-        _color = persisted_color;
-        return;
-    }
-
-    _color = ClockSettingsModel::ClockColor::Black;
+    const int clock_color{settings.value(_color_key, static_cast<int>(ClockColor::Black)).toInt()};
+    _color = static_cast<ClockColor>(clock_color);
 }
 
 void ClockSettingsModel::save() const
 {
     QSettings settings{};
-    settings.setValue(kColourKey, static_cast<int>(_color));
+    settings.setValue(_color_key, static_cast<int>(_color));
 }

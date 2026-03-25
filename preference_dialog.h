@@ -8,6 +8,7 @@
 #include "clock_settings_model.h"
 
 #include <QDialog>
+#include <QMap>
 
 class QComboBox;
 

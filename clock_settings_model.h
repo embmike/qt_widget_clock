@@ -6,6 +6,9 @@
 #define CLOCK_SETTINGS_MODEL_H
 
 #include <QObject>
+#include <QMap>
+#include <QString>
+#include <QColor>
 
 /**
  * @brief Modell zur Verwaltung der auswählbaren Uhrfarben.
@@ -23,6 +26,7 @@ public:
      */
     enum struct ClockColor
     {
+        Undefined,
         White,
         Green,
         Red,
@@ -49,12 +53,14 @@ public:
      */
     void setColor(ClockColor color);
 
+    QColor getQColor(ClockColor color);
+
 signals:
     /**
      * @brief Signalisiert eine geänderte Uhrfarbe.
      * @param color Neu gesetzte Farbauswahl.
      */
-    void colorChanged(ClockSettingsModel::ClockColor color);
+    void colorChanged(ClockColor color);
 
 private:
     /** @brief Lädt die persistierte Farbauswahl aus den Einstellungen. */
@@ -63,8 +69,14 @@ private:
     /** @brief Schreibt die Farbauswahl in die Einstellungen. */
     void save() const;
 
+    /** @brief Mappe der Farben bezüglich ClockColor. */
+    static const QMap<ClockColor, QColor> _color_map;
+
     /** @brief Aktuell selektierte Farbauswahl. */
     ClockColor _color{ClockColor::Black};
+
+    /** @brief Name der Farbeinstellung */
+    static constexpr auto _color_key{"clock_color"};
 };
 
 #endif // CLOCK_SETTINGS_MODEL_H
