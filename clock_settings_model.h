@@ -64,7 +64,7 @@ signals:
      * @brief Signalisiert eine geänderte Uhrfarbe.
      * @param color Neu gesetzte Farbauswahl.
      */
-    void colorChanged(ClockColor color);
+    void colorChanged(ClockSettingsModel::ClockColor color);
 
 private:
     /** @brief Lädt die persistierte Farbauswahl aus den Einstellungen. */
