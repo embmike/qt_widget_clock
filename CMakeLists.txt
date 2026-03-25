@@ -14,6 +14,8 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
 set(PROJECT_SOURCES
         main.cpp
+        lcd_clock.cpp
+        lcd_clock.h
         main_window.cpp
         main_window.h
         main_window.ui

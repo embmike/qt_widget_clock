@@ -9,12 +9,13 @@ class MainWindow;
 }
 QT_END_NAMESPACE
 
+class LcdClock;
+
 /**
  * @brief Hauptfenster der Uhr-Anwendung.
  *
- * @details Das Fenster zeigt die aktuelle Uhrzeit in einem LCD-Widget an,
- * unterstützt Drag-and-Drop-Verschieben per Maus und bietet ein
- * Kontextmenü mit einer Beenden-Aktion.
+ * Das Fenster kapselt die Fensterinteraktion (Drag, Kontextmenü)
+ * und delegiert die Uhr-Logik an die Komponente @ref LcdClock.
  */
 class MainWindow : public QMainWindow
 {
@@ -25,7 +26,7 @@ public:
      * @brief Erzeugt das Hauptfenster.
      * @param parent Optionales Parent-Widget.
      */
-
+     
     explicit MainWindow(QWidget *parent = nullptr);
     /**
      * @brief Zerstört das Hauptfenster und gibt UI-Ressourcen frei.
@@ -33,13 +34,11 @@ public:
     ~MainWindow() override;
 
 private:
-    Ui::MainWindow *_ui{nullptr}; ///< Zeiger auf das von Qt Designer erzeugte UI-Objekt.
-    QPoint _mouse_pos{}; ///< Letzte Mausposition relativ zum Fenster für Drag-Bewegungen.
+    Ui::MainWindow *_ui{nullptr};   ///< Zeiger auf das von Qt Designer erzeugte UI-Objekt.
+    LcdClock *_lcd_clock{nullptr};  ///< Verantwortlich für die Anzeige- und Update-Logik der Uhr.
+    QPoint _mouse_pos{};            ///< Letzte Mausposition relativ zum Fenster für Drag-Bewegungen.
 
 private slots:
-    /** @brief Aktualisiert die angezeigte Uhrzeit im LCD-Widget. */
-    void updateTime();
-
     /**
      * @brief Zeigt das Kontextmenü an der übergebenen Fensterposition.
      * @param pos Position relativ zum Hauptfenster.
@@ -52,19 +51,19 @@ protected:
      * @param event Mausereignis.
      */
     void mouseReleaseEvent(QMouseEvent *event) override;
-
+    
     /**
      * @brief Verarbeitet das Drücken einer Maustaste.
      * @param event Mausereignis.
      */
+    
     void mousePressEvent(QMouseEvent *event) override;
-
     /**
      * @brief Verarbeitet Mausbewegungen zum Verschieben des Fensters.
      * @param event Mausereignis.
      */
     void mouseMoveEvent(QMouseEvent *event) override;
-
+    
     /**
      * @brief Verarbeitet das Schließen des Fensters.
      * @param event Schließereignis.

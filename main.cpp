@@ -6,6 +6,12 @@
 
 #include <QApplication>
 
+/**
+ * @brief Einstiegspunkt der Anwendung.
+ * @param argc Anzahl der Kommandozeilenargumente.
+ * @param argv Kommandozeilenargumente.
+ * @return Rückgabecode der Qt-Ereignisschleife.
+ */
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
