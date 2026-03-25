@@ -10,6 +10,7 @@ class MainWindow;
 QT_END_NAMESPACE
 
 class LcdClock;
+class ClockSettingsModel;
 
 /**
  * @brief Hauptfenster der Uhr-Anwendung.
@@ -27,16 +28,20 @@ public:
      * @param parent Optionales Parent-Widget.
      */
     explicit MainWindow(QWidget *parent = nullptr);
-
     /**
      * @brief Zerstört das Hauptfenster und gibt UI-Ressourcen frei.
      */
     ~MainWindow() override;
 
 private:
-    Ui::MainWindow *_ui{nullptr};   ///< Zeiger auf das von Qt Designer erzeugte UI-Objekt.
-    LcdClock *_lcd_clock{nullptr};  ///< Verantwortlich für die Anzeige- und Update-Logik der Uhr.
-    QPoint _mouse_pos{};            ///< Letzte Mausposition relativ zum Fenster für Drag-Bewegungen.
+    /** @brief Zeiger auf das von Qt Designer erzeugte UI-Objekt. */
+    Ui::MainWindow *_ui{nullptr};
+    /** @brief Verantwortlich für die Anzeige- und Update-Logik der Uhr. */
+    LcdClock *_lcd_clock{nullptr};
+    /** @brief Modell für persistente Benutzereinstellungen. */
+    ClockSettingsModel *_settings{nullptr};
+    /** @brief Letzte Mausposition relativ zum Fenster für Drag-Bewegungen. */
+    QPoint _mouse_pos{};
 
 private slots:
     /**
@@ -44,6 +49,8 @@ private slots:
      * @param pos Position relativ zum Hauptfenster.
      */
     void showContextMenu(const QPoint &pos);
+    /** @brief Öffnet den Einstellungsdialog für die Uhrfarbe. */
+    void showPreference();
 
 protected:
     /**
@@ -51,19 +58,16 @@ protected:
      * @param event Mausereignis.
      */
     void mouseReleaseEvent(QMouseEvent *event) override;
-    
     /**
      * @brief Verarbeitet das Drücken einer Maustaste.
      * @param event Mausereignis.
      */
-    
     void mousePressEvent(QMouseEvent *event) override;
     /**
      * @brief Verarbeitet Mausbewegungen zum Verschieben des Fensters.
      * @param event Mausereignis.
      */
     void mouseMoveEvent(QMouseEvent *event) override;
-    
     /**
      * @brief Verarbeitet das Schließen des Fensters.
      * @param event Schließereignis.

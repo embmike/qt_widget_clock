@@ -14,11 +14,15 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
 set(PROJECT_SOURCES
         main.cpp
+        clock_settings_model.cpp
+        clock_settings_model.h
         lcd_clock.cpp
         lcd_clock.h
         main_window.cpp
         main_window.h
         main_window.ui
+        preference_dialog.cpp
+        preference_dialog.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

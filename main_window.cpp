@@ -3,6 +3,7 @@
  * @brief Implementierung des MainWindow.
  */
 #include "main_window.h"
+#include "clock_settings_model.h"
 #include "lcd_clock.h"
 #include "./ui_main_window.h"
 
@@ -14,14 +15,11 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , _ui(new Ui::MainWindow)
+    , _settings(new ClockSettingsModel(this))
     , _lcd_clock(nullptr)
 {
     _ui->setupUi(this);
-    _lcd_clock = new LcdClock(_ui->_lcd_number, this);
-
-    QSettings sts{};
-    restoreGeometry(sts.value("main_geometry").toByteArray());
-    restoreState(sts.value("main_state").toByteArray());
+    _lcd_clock = new LcdClock(_ui->_lcd_number, _settings, this);
 
     setAttribute(Qt::WA_TranslucentBackground);
     setWindowFlags(Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint | windowFlags());
@@ -43,8 +41,14 @@ void MainWindow::showContextMenu(const QPoint &pos)
 {
     QMenu context_menu{};
 
+    context_menu.addAction(QString("Preferences"), this, &MainWindow::showPreference);
     context_menu.addAction(QString("Exit"), this, SLOT(close()));
     context_menu.exec(mapToGlobal(pos));
+}
+
+void MainWindow::showPreference()
+{
+    _lcd_clock->showPreferencesDialog(this);
 }
 
 void MainWindow::mousePressEvent(QMouseEvent *e)
