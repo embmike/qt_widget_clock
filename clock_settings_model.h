@@ -6,8 +6,6 @@
 #define CLOCK_SETTINGS_MODEL_H
 
 #include <QObject>
-#include <QMap>
-#include <QColor>
 
 /**
  * @brief Modell zur Verwaltung der auswählbaren Uhrfarben.
@@ -65,11 +63,8 @@ private:
     /** @brief Schreibt die Farbauswahl in die Einstellungen. */
     void save() const;
 
-    /** @brief Mappe der Farben bezüglich ClockColor. */
-    static const QMap<size_t, QColor> _color_map;
-
     /** @brief Aktuell selektierte Farbauswahl. */
-    QColor _color{Qt::black};
+    ClockColor _color{ClockColor::Black};
 };
 
 #endif // CLOCK_SETTINGS_MODEL_H

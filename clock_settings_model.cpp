@@ -5,21 +5,20 @@
 #include "clock_settings_model.h"
 
 #include <QSettings>
-
-#include "enum_index.h"
+#include <algorithm>
+#include <array>
 
 namespace
 {
 constexpr auto kColourKey{"Colour"};
-}
-
-const QMap<size_t, QColor> ClockSettingsModel::_color_map{
-     {enum_index(ClockSettingsModel::ClockColor::White), Qt::white}
-    ,{enum_index(ClockSettingsModel::ClockColor::White), Qt::green}
-    ,{enum_index(ClockSettingsModel::ClockColor::White), Qt::red}
-    ,{enum_index(ClockSettingsModel::ClockColor::White), Qt::darkBlue}
-    ,{enum_index(ClockSettingsModel::ClockColor::White), Qt::black}
+constexpr std::array<ClockSettingsModel::ClockColor, 5> kAvailableColors{
+    ClockSettingsModel::ClockColor::White,
+    ClockSettingsModel::ClockColor::Green,
+    ClockSettingsModel::ClockColor::Red,
+    ClockSettingsModel::ClockColor::Dark_Blue,
+    ClockSettingsModel::ClockColor::Black,
 };
+}
 
 ClockSettingsModel::ClockSettingsModel(QObject *parent)
     : QObject{parent}
@@ -47,10 +46,21 @@ void ClockSettingsModel::setColor(ClockSettingsModel::ClockColor color)
 void ClockSettingsModel::load()
 {
     QSettings settings{};
+    const auto persisted_value{
+        static_cast<size_t>(settings.value(
+            kColourKey,
+            static_cast<int>(ClockSettingsModel::ClockColor::Black)).toInt())};
+    const auto persisted_color{
+        static_cast<ClockSettingsModel::ClockColor>(persisted_value)};
 
-    //const size_t persisted_value{static_cast<size_t>(settings.value(kColourKey, _color).toInt())};
+    if (std::find(kAvailableColors.cbegin(), kAvailableColors.cend(), persisted_color)
+        != kAvailableColors.cend())
+    {
+        _color = persisted_color;
+        return;
+    }
 
-    _color = settings.value(kColourKey, _color); // Stelle korregieren
+    _color = ClockSettingsModel::ClockColor::Black;
 }
 
 void ClockSettingsModel::save() const
