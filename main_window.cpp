@@ -3,9 +3,8 @@
  * @brief Implementierung des MainWindow.
  */
 #include "main_window.h"
-#include "clock_settings_model.h"
 #include "lcd_clock.h"
-#include "./ui_main_window.h"
+#include "ui_main_window.h"
 
 #include <QMouseEvent>
 #include <QMenu>
@@ -13,10 +12,10 @@
 #include <QSettings>
 
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
-    , _ui(new Ui::MainWindow)
-    , _settings(new ClockSettingsModel(this))
-    , _lcd_clock(nullptr)
+    : QMainWindow{parent}
+    , _ui{new Ui::MainWindow}
+    , _settings{new ClockSettingsModel(this)}
+    , _lcd_clock{nullptr}
 {
     _ui->setupUi(this);
     _lcd_clock = new LcdClock(_ui->_lcd_number, _settings, this);
@@ -32,8 +31,8 @@ MainWindow::MainWindow(QWidget *parent)
     });
 
     QSettings sts{};
-    restoreGeometry(sts.value("main_geometry").toByteArray());
-    restoreState(sts.value("main_state").toByteArray());
+    restoreGeometry(sts.value(_main_geometry).toByteArray());
+    restoreState(sts.value(_main_state).toByteArray());
 }
 
 MainWindow::~MainWindow()
@@ -45,8 +44,8 @@ void MainWindow::showContextMenu(const QPoint &pos)
 {
     QMenu context_menu{};
 
-    context_menu.addAction(QString("Preferences"), this, &MainWindow::showPreference);
-    context_menu.addAction(QString("Exit"), this, SLOT(close()));
+    context_menu.addAction(QString(_preferences), this, &MainWindow::showPreference);
+    context_menu.addAction(QString(_exit), this, SLOT(close()));
     context_menu.exec(mapToGlobal(pos));
 }
 
@@ -79,10 +78,10 @@ void MainWindow::mouseReleaseEvent(QMouseEvent *e)
 
 void MainWindow::closeEvent(QCloseEvent *e)
 {
-    QSettings  sts{};
+    QSettings sts{};
 
-    sts.setValue("main_geometry", saveGeometry());
-    sts.setValue("main_state", saveState());
+    sts.setValue(_main_geometry, saveGeometry());
+    sts.setValue(_main_state, saveState());
 
     e->accept();
 }

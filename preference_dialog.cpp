@@ -9,8 +9,8 @@
 #include <QVBoxLayout>
 
 PreferenceDialog::PreferenceDialog(ClockSettingsModel::ClockColor initial_color, QWidget *parent)
-    : QDialog(parent)
-    , _color_box(new QComboBox(this))
+    : QDialog{parent}
+    , _color_box{new QComboBox(this)}
 {
     setWindowTitle(QString("Preferences"));
 

@@ -13,10 +13,10 @@
 #include <QTimer>
 
 LcdClock::LcdClock(QLCDNumber *display, ClockSettingsModel *settings, QObject *parent)
-    : QObject(parent)
-    , _display(display)
-    , _settings(settings)
-    , _timer(new QTimer(this))
+    : QObject{parent}
+    , _display{display}
+    , _settings{settings}
+    , _timer{new QTimer(this)}
 {
     connect(_timer, &QTimer::timeout, this, &LcdClock::updateDisplay);
     connect(_settings, &ClockSettingsModel::colorChanged, this, &LcdClock::applyColor);

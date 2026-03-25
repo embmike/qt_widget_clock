@@ -47,6 +47,18 @@ private:
     /** @brief Letzte Mausposition relativ zum Fenster für Drag-Bewegungen. */
     QPoint _mouse_pos{};
 
+    /** @brief Name der Fensterposition */
+    static constexpr auto _main_geometry{"main_geometry"};
+
+    /** @brief Name der Fensterzustand */
+    static constexpr auto _main_state{"main_state"};
+
+    /** @brief Menüaktion zur Farbauswahl */
+    static constexpr auto _preferences{"Preferences"};
+
+    /** @brief Menüaktion zu Beendigung der Applikation */
+    static constexpr auto _exit{"Exit"};
+
 private slots:
     /**
      * @brief Zeigt das Kontextmenü an der übergebenen Fensterposition.
@@ -62,14 +74,14 @@ protected:
      * @brief Verarbeitet das Loslassen einer Maustaste.
      * @param event Mausereignis.
      */
-
     void mouseReleaseEvent(QMouseEvent *event) override;
+
     /**
      * @brief Verarbeitet das Drücken einer Maustaste.
      * @param event Mausereignis.
      */
-
     void mousePressEvent(QMouseEvent *event) override;
+
     /**
      * @brief Verarbeitet Mausbewegungen zum Verschieben des Fensters.
      * @param event Mausereignis.
@@ -81,6 +93,5 @@ protected:
      * @param event Schließereignis.
      */
     void closeEvent(QCloseEvent *event) override;
-
 };
 #endif // MAIN_WINDOW_H
