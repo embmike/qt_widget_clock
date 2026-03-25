@@ -26,6 +26,7 @@ public:
      * @brief Erzeugt das Hauptfenster.
      * @param parent Optionales Parent-Widget.
      */
+     
     explicit MainWindow(QWidget *parent = nullptr);
     /**
      * @brief Zerstört das Hauptfenster und gibt UI-Ressourcen frei.
@@ -33,12 +34,9 @@ public:
     ~MainWindow() override;
 
 private:
-    /** @brief Zeiger auf das von Qt Designer erzeugte UI-Objekt. */
-    Ui::MainWindow *_ui{nullptr};
-    /** @brief Verantwortlich für die Anzeige- und Update-Logik der Uhr. */
-    LcdClock *_lcd_clock{nullptr};
-    /** @brief Letzte Mausposition relativ zum Fenster für Drag-Bewegungen. */
-    QPoint _mouse_pos{};
+    Ui::MainWindow *_ui{nullptr};   ///< Zeiger auf das von Qt Designer erzeugte UI-Objekt.
+    LcdClock *_lcd_clock{nullptr};  ///< Verantwortlich für die Anzeige- und Update-Logik der Uhr.
+    QPoint _mouse_pos{};            ///< Letzte Mausposition relativ zum Fenster für Drag-Bewegungen.
 
 private slots:
     /**
@@ -53,16 +51,19 @@ protected:
      * @param event Mausereignis.
      */
     void mouseReleaseEvent(QMouseEvent *event) override;
+    
     /**
      * @brief Verarbeitet das Drücken einer Maustaste.
      * @param event Mausereignis.
      */
+    
     void mousePressEvent(QMouseEvent *event) override;
     /**
      * @brief Verarbeitet Mausbewegungen zum Verschieben des Fensters.
      * @param event Mausereignis.
      */
     void mouseMoveEvent(QMouseEvent *event) override;
+    
     /**
      * @brief Verarbeitet das Schließen des Fensters.
      * @param event Schließereignis.
