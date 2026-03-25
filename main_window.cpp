@@ -10,6 +10,7 @@
 #include <QMouseEvent>
 #include <QMenu>
 #include <QAction>
+#include <QSettings>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -74,5 +75,10 @@ void MainWindow::mouseReleaseEvent(QMouseEvent *e)
 
 void MainWindow::closeEvent(QCloseEvent *e)
 {
+    QSettings  sts{};
+
+    sts.setValue("main_geometry", saveGeometry());
+    sts.setValue("main_state", saveState());
+
     e->accept();
 }
