@@ -17,9 +17,11 @@ PreferenceDialog::PreferenceDialog(ClockSettingsModel::ClockColor initial_color,
     _color_box->addItem(QString("White"), static_cast<int>(ClockSettingsModel::ClockColor::White));
     _color_box->addItem(QString("Green"), static_cast<int>(ClockSettingsModel::ClockColor::Green));
     _color_box->addItem(QString("Red"), static_cast<int>(ClockSettingsModel::ClockColor::Red));
-    _color_box->addItem(QString("Black"), static_cast<int>(ClockSettingsModel::ClockColor::Black));
     _color_box->addItem(QString("Dark blue"), static_cast<int>(ClockSettingsModel::ClockColor::Dark_Blue));
-    _color_box->setCurrentIndex(static_cast<int>(initial_color));
+    _color_box->addItem(QString("Black"), static_cast<int>(ClockSettingsModel::ClockColor::Black));
+
+    const int color_index{_color_box->findData(static_cast<int>(initial_color))};
+    _color_box->setCurrentIndex(color_index >= 0 ? color_index : 0);
 
     QDialogButtonBox *buttons{
         new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this)};

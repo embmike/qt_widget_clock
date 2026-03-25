@@ -3,12 +3,26 @@
  * @brief Implementierung der Logikkomponente für die LCD-Uhr.
  */
 #include "lcd_clock.h"
+#include "enum_index.h"
 #include "preference_dialog.h"
 
+#include <QColor>
 #include <QLCDNumber>
+#include <QMap>
 #include <QPalette>
 #include <QTime>
 #include <QTimer>
+
+namespace
+{
+const QMap<size_t, QColor> kClockColorMap{
+     {enum_index(ClockSettingsModel::ClockColor::White), Qt::white}
+    ,{enum_index(ClockSettingsModel::ClockColor::Green), Qt::green}
+    ,{enum_index(ClockSettingsModel::ClockColor::Red), Qt::red}
+    ,{enum_index(ClockSettingsModel::ClockColor::Dark_Blue), Qt::darkBlue}
+    ,{enum_index(ClockSettingsModel::ClockColor::Black), Qt::black}
+};
+}
 
 LcdClock::LcdClock(QLCDNumber *display, ClockSettingsModel *settings, QObject *parent)
     : QObject(parent)
@@ -50,35 +64,10 @@ void LcdClock::updateDisplay()
 void LcdClock::applyColor(ClockSettingsModel::ClockColor color)
 {
     QPalette palette{};
-    switch (color)
-    {
-        case ClockSettingsModel::ClockColor::White:
-        {
-            palette.setColor(QPalette::WindowText, Qt::white);
-            break;
-        }
-        case ClockSettingsModel::ClockColor::Green:
-        {
-            palette.setColor(QPalette::WindowText, Qt::green);
-            break;
-        }
-        case ClockSettingsModel::ClockColor::Red:
-        {
-            palette.setColor(QPalette::WindowText, Qt::red);
-            break;
-        }
-        case ClockSettingsModel::ClockColor::Dark_Blue:
-        {
-            palette.setColor(QPalette::WindowText, Qt::darkBlue);
-            break;
-        }
-        case ClockSettingsModel::ClockColor::Black: [[fallthrough]];
-        default:
-        {
-            palette.setColor(QPalette::WindowText, Qt::black);
-            break;
-        }
-    }
+    const QColor display_color{
+        kClockColorMap.value(enum_index(color), Qt::black)};
+
+    palette.setColor(QPalette::WindowText, display_color);
 
     _display->setPalette(palette);
 }
