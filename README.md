@@ -82,6 +82,6 @@ Run binary (single-config generators):
 
 For multi-config generators (e.g., Visual Studio), run the executable from the chosen configuration directory.
 
-## License
+## Licence
 
-MIT License. See `LICENSE`.
+This project is licensed under the terms of the [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
